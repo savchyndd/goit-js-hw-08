@@ -8,6 +8,9 @@ const formData = {};
 // Get form element
 const formRef = document.querySelector('.feedback-form');
 
+// Call function checks localStorage
+populateForm();
+
 // Add event listener on form submit and input
 formRef.addEventListener('submit', onFormSubmit);
 formRef.addEventListener('input', throttle(onTextInput, 500));
@@ -29,6 +32,9 @@ function populateForm() {
     const { email = '', message = '' } = JSON.parse(savedFormData);
     formRef.email.value = email;
     formRef.message.value = message;
+    // fix of automatic resetting of field value of one of the fields after reboot
+    formData.email = email;
+    formData.message = message;
   }
 }
 
@@ -38,6 +44,9 @@ function onFormSubmit(e) {
 
   e.currentTarget.reset();
   localStorage.removeItem(FB_FORM_STATE);
-}
 
-populateForm();
+  // Clears obj formData
+  for (const key in formData) {
+    if (formData.hasOwnProperty(key)) delete formData[key];
+  }
+}
