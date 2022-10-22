@@ -1,13 +1,12 @@
-// Add imports above this line
+// Imports library
 import { galleryItems } from './gallery-items';
-// Change code below this line
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+// Get div gallery element
 const divGalleryRef = document.querySelector('.gallery');
 
-// Створення елементів галереї (div>a>img)
+// Creating gallery elements (div>a>img)
 const makeGalleryItem = itemsArray => {
   return itemsArray.map(({ description, original, preview }) => {
     const galleryLink = document.createElement('a');
@@ -28,7 +27,7 @@ const makeGalleryItem = itemsArray => {
 const elementsGallery = makeGalleryItem(galleryItems);
 divGalleryRef.append(...elementsGallery);
 
-// Ініціалізація галереї з параметрами опису зображення
+// Initializing the gallery with image description parameters
 new SimpleLightbox('.gallery a', {
   captionDelay: 250,
   captionsData: 'alt',
