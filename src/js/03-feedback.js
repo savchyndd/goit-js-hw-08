@@ -1,5 +1,6 @@
 // Import library
 import throttle from 'lodash.throttle';
+import * as storageLocal from './storage';
 
 // Initial constants
 const FB_FORM_STATE = 'feedback-form-state';
@@ -20,16 +21,15 @@ function onTextInput(e) {
   const { name, value } = e.target;
 
   formData[name] = value;
-
-  localStorage.setItem(FB_FORM_STATE, JSON.stringify(formData));
+  storageLocal.save(FB_FORM_STATE, formData);
 }
 
 // Checks localStorage and writ in form save value
 function populateForm() {
-  const savedFormData = localStorage.getItem(FB_FORM_STATE);
+  const savedFormData = storageLocal.load(FB_FORM_STATE);
 
   if (savedFormData) {
-    const { email = '', message = '' } = JSON.parse(savedFormData);
+    const { email = '', message = '' } = savedFormData;
     formRef.email.value = email;
     formRef.message.value = message;
     // fix of automatic resetting of field value of one of the fields after reboot
@@ -42,8 +42,10 @@ function populateForm() {
 function onFormSubmit(e) {
   e.preventDefault();
 
+  console.log(formData);
+
   e.currentTarget.reset();
-  localStorage.removeItem(FB_FORM_STATE);
+  storageLocal.remove(FB_FORM_STATE);
 
   // Clears obj formData
   for (const key in formData) {
